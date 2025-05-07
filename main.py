@@ -105,7 +105,7 @@ with st.expander("📋 Informações do Cliente", expanded=True):
             value=st.session_state.dados['cliente']['empresa']
         )
         st.session_state.dados['cliente']['referencia'] = st.text_input(
-            "Referência*",
+            "Referente a*",
             value=st.session_state.dados['cliente']['referencia']
         )
     
