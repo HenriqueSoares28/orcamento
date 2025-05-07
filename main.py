@@ -5,11 +5,6 @@ from io import BytesIO
 import datetime
 import locale
 
-# Configurar locale para formato brasileiro
-try:
-    locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
-except:
-    locale.setlocale(locale.LC_ALL, 'Portuguese_Brazil.1252')
 
 # Configurações de estilo
 st.set_page_config(
