@@ -241,7 +241,7 @@ class PDF(FPDF):
             
             f"PARA: {cliente['empresa']}\n"
             f"REF: {cliente['referencia']}\n"
-            "SERVIÇO: REGULADOR DE TENSÃO",
+            "",
             
             f"\n\nData: {data}\n"
             "Validade: 10 dias",
@@ -253,7 +253,7 @@ class PDF(FPDF):
         ]
 
         # Configurar estilo
-        self.set_font('Arial', '', 10)
+        self.set_font('helvetica', '', 10)
         self.set_text_color(0, 0, 0)
         self.set_draw_color(150, 150, 150)
 
@@ -287,7 +287,7 @@ def gerar_pdf():
         pdf.set_margins(20, 55, 20)
         
         # --- Página 1 - Cabeçalho ---
-        pdf.set_font("Arial", 'B', 12)
+        pdf.set_font("helvetica", 'B', 12)
         
         pdf.criar_tabela_informacoes()
 
@@ -296,12 +296,12 @@ def gerar_pdf():
         
         
         # Número da proposta
-        pdf.set_font("Arial", 'B', 12)
+        pdf.set_font("helvetica", 'B', 12)
         pdf.cell(0, 10, f"PROPOSTA TÉCNICA E COMERCIAL: 00109/{datetime.datetime.now().year}", ln=1)
         pdf.ln(2)
 
         # Introdução
-        pdf.set_font("Arial", size=10)
+        pdf.set_font("helvetica", size=10)
         intro_texto = """Honrados pela oportunidade de apresentarmos nossos serviços, vimos por esta apresentar-lhes a
 nossa Proposta Técnica para o fornecimento em questão.
 
@@ -312,14 +312,14 @@ adicionais."""
         largura_util = 170  # Largura máxima considerando margens de 20mm
 
         # Texto introdutório
-        pdf.set_font("Arial", size=10)
+        pdf.set_font("helvetica", size=10)
         pdf.multi_cell(largura_util, 6, intro_texto)
         pdf.ln(5)
 
         # Objeto da Proposta
-        pdf.set_font("Arial", 'B', 11)
+        pdf.set_font("helvetica", 'B', 11)
         pdf.cell(largura_util, 10, "1. OBJETO DA PROPOSTA:", ln=1)
-        pdf.set_font("Arial", size=10)
+        pdf.set_font("helvetica", size=10)
         pdf.multi_cell(
             largura_util,  # Largura controlada
             6,  # Altura da linha
@@ -330,7 +330,7 @@ adicionais."""
         pdf.ln(1)
 
         # Itens Excluídos
-        pdf.set_font("Arial", 'B', 11)
+        pdf.set_font("helvetica", 'B', 11)
         pdf.cell(0, 10, "Consideramos fora do nosso escopo de fornecimento os seguintes itens:", ln=1)
         exclusoes = [
             "Fornecimento de água potável no local da obra.",
@@ -343,7 +343,7 @@ adicionais."""
             "Transporte do equipamento"
         ]
         
-        pdf.set_font("Arial", size=10)
+        pdf.set_font("helvetica", size=10)
         for item in exclusoes:
             pdf.cell(3, 6, "> ")
             pdf.multi_cell(0, 6, item)
@@ -356,7 +356,7 @@ adicionais."""
         
         # Cabeçalho da Tabela
         pdf.set_fill_color(200, 200, 200)
-        pdf.set_font("Arial", 'B', 10)
+        pdf.set_font("helvetica", 'B', 10)
         for i, header in enumerate(["ITEM", "QUANT", "DESCRIÇÃO", "VALOR UNITÁRIO", "TOTAL"]):
             pdf.set_xy(20 + sum(col_widths[:i]), y_pos)
             pdf.cell(col_widths[i], 10, header, 1, 0, 'C', 1)
@@ -364,7 +364,7 @@ adicionais."""
         y_pos += 10
 
         # Linhas dos Itens
-        pdf.set_font("Arial", size=9)
+        pdf.set_font("helvetica", size=9)
         for item in st.session_state.dados['itens']:
             if y_pos > 250:  # Quebra de página
                 pdf.add_page()
@@ -416,11 +416,11 @@ adicionais."""
         pdf.set_xy(20, 60)
         
         # Condições de Pagamento
-        pdf.set_font("Arial", 'B', 10)
+        pdf.set_font("helvetica", 'B', 10)
         pdf.cell(0, 10, "CONDIÇÕES DE PAGAMENTO: Na entrega do serviço", ln=1)
         
         # Texto Final
-        pdf.set_font("Arial", size=10)
+        pdf.set_font("helvetica", size=10)
         texto_final = """Desde já, agradecemos o seu contato e permanecemos à disposição para maiores
 informações. Cordialmente,"""
         pdf.multi_cell(0, 6, texto_final)
@@ -433,23 +433,13 @@ informações. Cordialmente,"""
 
         # Nome
         pdf.set_xy(20, 205)  # 5mm abaixo da linha
-        pdf.set_font("Arial", 'B', 12)
+        pdf.set_font("helvetica", 'B', 12)
         pdf.cell(0, 6, "Délzio de Avelar", ln=1)  # Altura reduzida para 6mm
 
         # CNPJ
         pdf.set_x(20)
-        pdf.set_font("Arial", size=10)
+        pdf.set_font("helvetica", size=10)
         pdf.cell(0, 5, "12.045.144/0001-43", ln=1)  # Altura 5mm
-
-        # Contatos
-        pdf.set_x(20)
-        pdf.set_font("Arial", 'B', 10)
-        pdf.cell(0, 5, "Contatos:", ln=1)  # Altura 5mm
-
-        # Números
-        pdf.set_x(20)
-        pdf.set_font("Arial", size=10)
-        pdf.cell(0, 5, "(31) 99776-9914 | (31) 98229-9162", ln=1)
 
         # Geração do PDF
         buffer = BytesIO()
