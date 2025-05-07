@@ -220,65 +220,70 @@ class PDF(FPDF):
         pass
     
     def criar_tabela_informacoes(self):
-        # Configurações de posição
-        x = 10
+        # Configurações fixas
+        x = 20
         y = 170
-        largura = 180
-        altura = 60
+        col_width = 85  # Largura de cada coluna
+        label_width = 25  # Largura fixa para os rótulos
 
         # Dados dinâmicos
         cliente = st.session_state.dados['cliente']
         data = datetime.datetime.now().strftime('%d/%m/%Y')
-        
-        # Textos organizados
-        conteudo = [
-            "DEPARTAMENTO TÉCNICO\n"
-            "Email: delzioav@yahoo.com.br\n"
-            "Tel: (31) 98229.9162\n\n"
-            "DELZIO DE AVELAR - COMERCIAL\n"
-            "Email: delzioseda@gmail.com\n"
-            "Fone: 31-98229.9162",
-            
-            f"PARA: {cliente['empresa']}\n"
-            f"REF: {cliente['referencia']}\n"
-            "",
-            
-            f"\n\nData: {data}\n"
-            "Validade da proposta: 10 dias",
-            
-            f"A/C: {cliente['nome']}\n"
-            f"Contato: {cliente['telefone']}\n"
-            f"Email: {cliente['email']}\n"
-            f"Local: {cliente['local']}"
-        ]
 
         # Configurar estilo
-        self.set_font('helvetica', '', 10)
-        self.set_text_color(0, 0, 0)
         self.set_draw_color(150, 150, 150)
-
-        # Desenhar contorno externo
-        self.rect(x, y, largura, altura)
         
-        # Desenhar divisória vertical central
-        self.line(
-            x + largura/2, y,
-            x + largura/2, y + altura
+        # Linha horizontal
+        self.line(x, y, x + col_width * 2, y)
+
+        # Coluna Esquerda
+        self.set_font('helvetica', 'B', 10)
+        self.set_xy(x, y + 5)
+        self.cell(col_width, 5, 'DEPARTAMENTO TÉCNICO', ln=1)
+
+        self.set_font('helvetica', '', 10)
+        self.set_x(x)
+        self.multi_cell(col_width, 5, 
+            "Email: delzioav@yahoo.com.br\n"
+            "Tel: (31) 98229.9162\n",
+            ln=1
         )
 
-        # Adicionar textos
-        positions = [
-            (x + 5, y + 5),          # Célula 1 (esquerda superior)
-            (x + largura/2 + 5, y + 5),  # Célula 2 (direita superior)
-            (x + 5, y + altura/2 + 5),   # Célula 3 (esquerda inferior)
-            (x + largura/2 + 5, y + altura/2 + 5)  # Célula 4 (direita inferior)
-        ]
+        # Parte em negrito
+        self.set_font('helvetica', 'B', 10)
+        self.set_x(x)
+        self.cell(col_width, 5, "DELZIO DE AVELAR - COMERCIAL", ln=1)
 
-        for i, (pos_x, pos_y) in enumerate(positions):
-            self.set_xy(pos_x, pos_y)
-            self.multi_cell(largura/2 - 10, 5, conteudo[i], align='L')
-    
-    
+        # Continuação normal
+        self.set_font('helvetica', '', 10)
+        self.set_x(x)
+        self.multi_cell(col_width, 5, 
+            "Email: delzioseda@gmail.com\n"
+            "Fone: 31-98229-9162"
+        )
+
+        # Coluna Direita
+        def escrever_linha(rotulo, valor, y_offset):
+            self.set_font('helvetica', 'B', 10)
+            self.set_xy(x + col_width, y + y_offset)
+            self.cell(label_width, 5, rotulo, ln=0)  # ln=0 para não quebrar linha
+            
+            self.set_font('helvetica', '', 10)
+            self.cell(col_width - label_width, 5, valor, ln=1)  # Largura restante
+
+        # Escrever linhas com alinhamento correto
+        escrever_linha('PARA:', cliente['empresa'], 5)
+        escrever_linha('REF:', cliente['referencia'], 10)
+        escrever_linha('Data:', data, 25)
+        escrever_linha('Validade:', '10 dias', 30)
+        escrever_linha('A/C:', cliente['nome'], 45)
+        escrever_linha('Contato:', cliente['telefone'], 50)
+        escrever_linha('Email:', cliente['email'], 55)
+        escrever_linha('Local:', cliente['local'], 60)
+
+        # Borda externa
+        self.rect(x, y, col_width * 2, 70)
+            
 def gerar_pdf():
     try:
         pdf = PDF()
