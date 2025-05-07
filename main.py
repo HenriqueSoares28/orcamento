@@ -244,9 +244,9 @@ class PDF(FPDF):
             "",
             
             f"\n\nData: {data}\n"
-            "Validade: 10 dias",
+            "Validade da proposta: 10 dias",
             
-            f"Responsável: {cliente['nome']}\n"
+            f"A/C: {cliente['nome']}\n"
             f"Contato: {cliente['telefone']}\n"
             f"Email: {cliente['email']}\n"
             f"Local: {cliente['local']}"
